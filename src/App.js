@@ -3,21 +3,41 @@ import Table from "./components/Table";
 import Filters from "./components/Filters";
 import Modal from "./components/Modal";
 
+const initialFilters = {
+  name: "",
+  age: "",
+  gender: "",
+  country: "",
+};
+
+const initialSort = {
+  key: "",
+  direction: "none",
+};
+
+function getSortValue(user, key) {
+  if (key === "fio") {
+    return `${user.lastName} ${user.firstName} ${user.maidenName || ""}`;
+  }
+  if (key === "age") {
+    return user.age;
+  }
+  if (key === "gender") {
+    return user.gender;
+  }
+  if (key === "phone") {
+    return user.phone;
+  }
+  return "";
+}
+
 function App() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [filters, setFilters] = useState({
-    name: "",
-    age: "",
-    gender: "",
-    country: "",
-  });
-  const [sortConfig, setSortConfig] = useState({
-    key: "",
-    direction: "none",
-  });
+  const [filters, setFilters] = useState(initialFilters);
+  const [sortConfig, setSortConfig] = useState(initialSort);
 
   useEffect(() => {
     fetch("https://dummyjson.com/users")
@@ -45,7 +65,7 @@ function App() {
       if (prev.direction === "asc") {
         return { key, direction: "desc" };
       }
-      return { key: "", direction: "none" };
+      return initialSort;
     });
   };
 
@@ -57,14 +77,10 @@ function App() {
   };
 
   const filteredUsers = users.filter((user) => {
-    const nameMatch = user.firstName
-      .toLowerCase()
-      .includes(filters.name.toLowerCase());
+    const nameMatch = user.firstName.toLowerCase().includes(filters.name.toLowerCase());
     const ageMatch = String(user.age).includes(filters.age.trim());
     const genderMatch = filters.gender ? user.gender === filters.gender : true;
-    const countryMatch = filters.country
-      ? user.address?.country === filters.country
-      : true;
+    const countryMatch = filters.country ? user.address?.country === filters.country : true;
 
     return nameMatch && ageMatch && genderMatch && countryMatch;
   });
@@ -72,25 +88,8 @@ function App() {
   const sortedUsers = [...filteredUsers];
   if (sortConfig.direction !== "none" && sortConfig.key) {
     sortedUsers.sort((a, b) => {
-      let left = "";
-      let right = "";
-
-      if (sortConfig.key === "fio") {
-        left = `${a.lastName} ${a.firstName} ${a.maidenName || ""}`;
-        right = `${b.lastName} ${b.firstName} ${b.maidenName || ""}`;
-      }
-      if (sortConfig.key === "age") {
-        left = a.age;
-        right = b.age;
-      }
-      if (sortConfig.key === "gender") {
-        left = a.gender;
-        right = b.gender;
-      }
-      if (sortConfig.key === "phone") {
-        left = a.phone;
-        right = b.phone;
-      }
+      const left = getSortValue(a, sortConfig.key);
+      const right = getSortValue(b, sortConfig.key);
 
       if (typeof left === "number" && typeof right === "number") {
         return sortConfig.direction === "asc" ? left - right : right - left;

@@ -24,6 +24,19 @@ const defaultWidths = {
   city: 140,
 };
 
+function getCellValue(user, key) {
+  if (key === "country") {
+    return user.address?.country || "";
+  }
+  if (key === "city") {
+    return user.address?.city || "";
+  }
+  if (key === "maidenName") {
+    return user.maidenName || "";
+  }
+  return user[key] || "";
+}
+
 function Table({ users, onSort, sortConfig, onRowClick }) {
   const [widths, setWidths] = useState(defaultWidths);
   const resizeRef = useRef({
@@ -38,8 +51,10 @@ function Table({ users, onSort, sortConfig, onRowClick }) {
       if (!resizeRef.current.active) {
         return;
       }
+
       const delta = event.clientX - resizeRef.current.startX;
       const nextWidth = Math.max(50, resizeRef.current.startWidth + delta);
+
       setWidths((prev) => ({
         ...prev,
         [resizeRef.current.key]: nextWidth,
@@ -92,10 +107,7 @@ function Table({ users, onSort, sortConfig, onRowClick }) {
               >
                 {column.label}
                 {column.sortable ? getSortMark(column.sortKey) : ""}
-                <div
-                  className="resizer"
-                  onMouseDown={(e) => startResize(e, column.key)}
-                />
+                <div className="resizer" onMouseDown={(e) => startResize(e, column.key)} />
               </th>
             ))}
           </tr>
@@ -103,15 +115,11 @@ function Table({ users, onSort, sortConfig, onRowClick }) {
         <tbody>
           {users.map((user) => (
             <tr key={user.id} onClick={() => onRowClick(user)}>
-              <td style={{ width: widths.lastName }}>{user.lastName}</td>
-              <td style={{ width: widths.firstName }}>{user.firstName}</td>
-              <td style={{ width: widths.maidenName }}>{user.maidenName || ""}</td>
-              <td style={{ width: widths.age }}>{user.age}</td>
-              <td style={{ width: widths.gender }}>{user.gender}</td>
-              <td style={{ width: widths.phone }}>{user.phone}</td>
-              <td style={{ width: widths.email }}>{user.email}</td>
-              <td style={{ width: widths.country }}>{user.address?.country}</td>
-              <td style={{ width: widths.city }}>{user.address?.city}</td>
+              {columns.map((column) => (
+                <td key={`${user.id}-${column.key}`} style={{ width: widths[column.key] }}>
+                  {getCellValue(user, column.key)}
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
