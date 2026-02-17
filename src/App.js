@@ -104,30 +104,40 @@ function App() {
   const countries = [...new Set(users.map((u) => u.address?.country).filter(Boolean))];
 
   if (loading) {
-    return <div className="status-text">Загрузка...</div>;
+    return (
+      <div className="container">
+        <div className="status-text">Загрузка...</div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="status-text">Ошибка загрузки данных</div>;
+    return (
+      <div className="container">
+        <div className="status-text">Ошибка загрузки данных</div>
+      </div>
+    );
   }
 
   return (
-    <div className="app">
-      <h1>Пользователи</h1>
-      <Filters
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        countries={countries}
-      />
-      <Table
-        users={sortedUsers}
-        onSort={handleSort}
-        sortConfig={sortConfig}
-        onRowClick={setSelectedUser}
-      />
-      {selectedUser && (
-        <Modal user={selectedUser} onClose={() => setSelectedUser(null)} />
-      )}
+    <div className="container">
+      <div className="app">
+        <h1>Пользователи</h1>
+        <Filters
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          countries={countries}
+        />
+        <Table
+          users={sortedUsers}
+          onSort={handleSort}
+          sortConfig={sortConfig}
+          onRowClick={setSelectedUser}
+        />
+        {selectedUser && (
+          <Modal user={selectedUser} onClose={() => setSelectedUser(null)} />
+        )}
+      </div>
     </div>
   );
 }
