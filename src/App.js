@@ -122,7 +122,7 @@ function App() {
   return (
     <div className="container">
       <div className="app">
-        <h1>Пользователи</h1>
+        <h1>Тестовое задание: Таблица пользователей</h1>
         <Filters
           filters={filters}
           onFilterChange={handleFilterChange}
