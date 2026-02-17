@@ -1,30 +1,33 @@
-<<<<<<< HEAD
-﻿# Users Table
+# Users Table
 
-Простое React-приложение для отображения пользователей из API `https://dummyjson.com/users`.
+Тестовое задание на позицию разработчика JS.
 
-## Запуск
+React-приложение для отображения пользователей из API:
+https://dummyjson.com/users
 
-```bash
+Реализовано:
+- загрузка данных через Fetch API
+- сортировка (ФИО, возраст, пол, телефон)
+- фильтрация
+- модальное окно с подробной информацией
+- изменение ширины колонок
+- обработка ошибок загрузки
+
+## Запуск проекта
+
 npm install
 npm start
-```
+
+Приложение будет доступно по адресу:
+http://localhost:3000
 
 ## Сборка
 
-```bash
 npm run build
-```
 
 ## GitHub Pages
 
-1. Укажите правильный `homepage` в `package.json`.
-2. Выполните:
-
-```bash
 npm run deploy
-```
-=======
-# users-table-infotecs
-разработчик JS тестовое задание infotecs
->>>>>>> 41615df336d1e1082b02b25889078e733decc4a4
+
+Сайт:
+https://pingspiker.github.io/users-table-infotecs/
