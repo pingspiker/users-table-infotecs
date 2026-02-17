@@ -5,7 +5,7 @@ function Filters({ filters, onFilterChange, countries }) {
     <div className="filters">
       <input
         type="text"
-        placeholder="Фильтр по имени"
+        placeholder="Фильтр по ФИО"
         value={filters.name}
         onChange={(e) => onFilterChange("name", e.target.value)}
       />
