@@ -77,7 +77,9 @@ function App() {
   };
 
   const filteredUsers = users.filter((user) => {
-    const nameMatch = user.firstName.toLowerCase().includes(filters.name.toLowerCase());
+    const searchValue = filters.name.toLowerCase().trim();
+    const fullName = `${user.lastName} ${user.firstName} ${user.maidenName || ""}`.toLowerCase();
+    const nameMatch = fullName.includes(searchValue);
     const ageMatch = String(user.age).includes(filters.age.trim());
     const genderMatch = filters.gender ? user.gender === filters.gender : true;
     const countryMatch = filters.country ? user.address?.country === filters.country : true;
